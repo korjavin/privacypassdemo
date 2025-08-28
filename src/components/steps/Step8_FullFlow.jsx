@@ -54,8 +54,8 @@ const Step8_FullFlow = () => {
         const signature = unblind(evaluatedElement, blindingFactor);
         addToLog(`[Token ${i + 1}] Unblinded token successfully.`);
 
-        // 6. Store the token (nonce + signature)
-        const finalToken = { nonce, signature };
+        // 6. Store the token (nonce + output)
+        const finalToken = { nonce, output: signature };
         newTokens.push(finalToken);
 
       } catch (error) {
@@ -74,12 +74,30 @@ const Step8_FullFlow = () => {
     setIsLoading(false);
   }, []);
 
-  const handleSearch = () => {
+  const handleSearch = async () => {
     if (tokens.length > 0) {
-      const newTokens = tokens.slice(1);
-      setTokens(newTokens);
-      addToLog(`Valid anonymous request received for query: ${searchQuery}`);
-      setSearchQuery('');
+      const tokenToUse = tokens[0];
+      try {
+        const response = await fetch('http://localhost:3000/api/v1/redeem', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ token: tokenToUse }),
+        });
+
+        if (response.ok) {
+          const newTokens = tokens.slice(1);
+          setTokens(newTokens);
+          addToLog(`Valid anonymous request received for query: ${searchQuery}`);
+          setSearchQuery('');
+        } else {
+          const errorData = await response.json();
+          addToLog(`Error: ${errorData.error}`);
+        }
+      } catch (error) {
+        addToLog(`Error: ${error.message}`);
+      }
     } else {
       addToLog('Error: No tokens available. Please generate tokens first.');
     }

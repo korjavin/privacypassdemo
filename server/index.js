@@ -2,6 +2,7 @@
 import express from 'express';
 import cors from 'cors';
 import path from 'path';
+import process from 'process';
 import {
   generatePrivateKey,
   getPublicKey,
@@ -16,7 +17,7 @@ const app = express();
 const port = 3000;
 
 // Middleware
-app.use(cors({ origin: 'http://localhost:5173' }));
+app.use(cors({ origin: ['http://localhost:5173', 'http://localhost:5174'] }));
 app.use(express.json()); // Enable parsing of JSON request bodies
 
 // Serve static files

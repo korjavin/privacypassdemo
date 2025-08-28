@@ -2,7 +2,7 @@
 import { secp256k1 } from '@noble/curves/secp256k1.js';
 import { bytesToHex, hexToBytes } from '@noble/curves/abstract/utils.js';
 import { sha256 } from '@noble/hashes/sha2.js';
-import { mod } from '@noble/curves/abstract/modular.js';
+import { mod, invert } from '@noble/curves/abstract/modular.js';
 import { gcm } from '@noble/ciphers/aes.js';
 import { hkdf } from '@noble/hashes/hkdf.js';
 import { concatBytes, randomBytes } from '@noble/ciphers/utils.js';
@@ -62,7 +62,7 @@ export function blind(token) {
  */
 export function unblind(evaluatedTokenHex, blindingFactor) {
   const Z = secp256k1.ProjectivePoint.fromHex(evaluatedTokenHex);
-  const rInv = mod(blindingFactor, secp256k1.CURVE.n);
+  const rInv = invert(blindingFactor, secp256k1.CURVE.n);
   const N = Z.multiply(rInv);
   return N.toHex();
 }
