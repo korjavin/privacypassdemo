@@ -3,6 +3,9 @@ import { secp256k1 } from '@noble/curves/secp256k1';
 import { bytesToHex, hexToBytes } from '@noble/curves/abstract/utils';
 import { sha256 } from '@noble/hashes/sha2.js';
 import { mod } from '@noble/curves/abstract/modular';
+import { gcm } from '@noble/ciphers/aes';
+import { hkdf } from '@noble/hashes/hkdf';
+import { concatBytes, randomBytes } from '@noble/ciphers/utils';
 
 /**
  * The generator point G for the secp256k1 curve.
@@ -219,4 +222,59 @@ export function generateProof(privateKey, blindedPoint, evaluatedPoint) {
   };
 
   return JSON.stringify(proof);
+}
+
+/**
+ * Encrypts a message using ECIES.
+ *
+ * @param {string} publicKeyHex The recipient's public key, hex-encoded.
+ * @param {string} message The message to encrypt.
+ * @returns {Promise<string>} The encrypted message, hex-encoded.
+ */
+export async function encrypt(publicKeyHex, message) {
+  const theirPublicKey = secp256k1.ProjectivePoint.fromHex(publicKeyHex);
+  const ephemeralPrivateKey = generatePrivateKey();
+  const ephemeralPublicKeyBytes = secp256k1.getPublicKey(ephemeralPrivateKey, false); // uncompressed
+
+  const sharedSecret = secp256k1.getSharedSecret(ephemeralPrivateKey, theirPublicKey);
+  const aesKey = hkdf(sha256, sharedSecret, undefined, undefined, 32);
+
+  const nonce = randomBytes(12); // 96-bit nonce for AES-GCM
+  const data = new TextEncoder().encode(message);
+
+  const cipher = gcm(aesKey, nonce);
+  const encrypted = await cipher.encrypt(data);
+
+  const ciphertext = encrypted.slice(0, -16);
+  const tag = encrypted.slice(-16);
+
+  const payload = concatBytes(ephemeralPublicKeyBytes, nonce, tag, ciphertext);
+  return bytesToHex(payload);
+}
+
+/**
+ * Decrypts a message using ECIES.
+ *
+ * @param {Uint8Array} privateKey The recipient's private key.
+ * @param {string} encryptedHex The encrypted message, hex-encoded.
+ * @returns {Promise<string>} The decrypted message.
+ */
+export async function decrypt(privateKey, encryptedHex) {
+  const payload = hexToBytes(encryptedHex);
+
+  const ephemeralPublicKeyBytes = payload.slice(0, 65);
+  const nonce = payload.slice(65, 65 + 12);
+  const tag = payload.slice(65 + 12, 65 + 12 + 16);
+  const ciphertext = payload.slice(65 + 12 + 16);
+
+  const ephemeralPublicKey = secp256k1.ProjectivePoint.fromHex(bytesToHex(ephemeralPublicKeyBytes));
+
+  const sharedSecret = secp256k1.getSharedSecret(privateKey, ephemeralPublicKey);
+  const aesKey = hkdf(sha256, sharedSecret, undefined, undefined, 32);
+
+  const encryptedData = concatBytes(ciphertext, tag);
+  const decipher = gcm(aesKey, nonce);
+  const decryptedBytes = await decipher.decrypt(encryptedData);
+
+  return new TextDecoder().decode(decryptedBytes);
 }
