@@ -1,5 +1,4 @@
 import React from 'react';
-import './Step5.css';
 
 const Step5_OPRF = () => {
   return (

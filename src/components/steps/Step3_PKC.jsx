@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import './Step3.css';
 
 const Step3_PKC = () => {
   const [publicKey, setPublicKey] = useState('');

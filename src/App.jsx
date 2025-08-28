@@ -7,7 +7,6 @@ import Step5_OPRF from './components/steps/Step5_OPRF';
 import Step6_Trust from './components/steps/Step6_Trust';
 import Step7_ZKP from './components/steps/Step7_ZKP';
 import Step8_FullFlow from './components/steps/Step8_FullFlow';
-import './App.css';
 
 function App() {
   return (
