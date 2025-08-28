@@ -160,7 +160,8 @@ export function evaluate(privateKey, blindedElementHex) {
   const blindedPoint = secp256k1.ProjectivePoint.fromHex(blindedElementHex);
   const k = BigInt('0x' + bytesToHex(privateKey));
   const evaluatedPoint = blindedPoint.multiply(k);
-  const evaluatedElement = bytesToHex(evaluatedPoint.toRawBytes(true)); // compressed
+  // The `toHex(true)` method provides the compressed hex representation of the point.
+  const evaluatedElement = evaluatedPoint.toHex(true); // Correctly get compressed hex
   return { blindedPoint, evaluatedPoint, evaluatedElement };
 }
 
