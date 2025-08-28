@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { blind, unblind, verifyProof } from '../../lib/crypto';
-import { secp256k1 } from '@noble/curves/secp256k1';
 
 const Step7_ZKP = () => {
   const [serverPublicKey, setServerPublicKey] = useState(null);
@@ -26,32 +25,43 @@ const Step7_ZKP = () => {
     fetchPublicKey();
   }, []);
 
-  const handleBlind = () => {
+  const handleBlind = async () => {
     const nonce = `nonce-${Date.now()}`;
     setClientNonce(nonce);
     const { blindedToken, blindingFactor } = blind(nonce);
     setBlindedToken(blindedToken);
     setBlindingFactor(blindingFactor);
 
-    // Simulate sending to server and receiving response
-    // In a real app, this would be an API call
-    handleEvaluate(blindedToken);
+    // This is now a real API call to the server
+    await handleEvaluate(blindedToken);
   };
 
-  const handleEvaluate = (token) => {
-    // This is a mock of the server's evaluation
-    const M = secp256k1.ProjectivePoint.fromHex(token);
-    // The server would have a private key, but we'll use the public key for simulation
-    // This is NOT how it would work in reality. We are just simulating the point multiplication.
-    const Z = M.multiply(BigInt(12345)); // Dummy private key
-    setEvaluatedElement(Z.toHex());
+  const handleEvaluate = async (token) => {
+    try {
+      const response = await fetch('http://localhost:3000/api/v1/evaluate', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ blindedElement: token }),
+      });
 
-    // Mock proof
-    const mockProof = { data: 'mock-proof' };
-    setProof(mockProof);
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
 
-    const isValid = verifyProof(mockProof, isMalicious);
-    setVerificationStatus(isValid ? 'Success' : 'Failure');
+      const data = await response.json();
+      setEvaluatedElement(data.evaluatedElement);
+      // The proof from the server is a JSON string, so we need to parse it
+      const parsedProof = JSON.parse(data.proof);
+      setProof(parsedProof);
+
+      const isValid = verifyProof(parsedProof, isMalicious);
+      setVerificationStatus(isValid ? 'Success' : 'Failure');
+    } catch (error) {
+      console.error('Error during evaluation:', error);
+      setVerificationStatus('Error');
+    }
   };
 
   const handleUnblind = () => {
