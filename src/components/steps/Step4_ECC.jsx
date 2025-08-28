@@ -147,7 +147,6 @@ const Step4_ECC = () => {
         </div>
       </div>
       <div className="animation-column">
-        <img src="/images/4.1.png" alt="Elliptic Curve Billiards - Visual representation of point addition and scalar multiplication on an elliptic curve" className="step-image" style={{ marginBottom: '1rem' }} />
         <canvas ref={canvasRef} width="500" height="500" style={{ border: '1px solid black' }}></canvas>
       </div>
     </div>
