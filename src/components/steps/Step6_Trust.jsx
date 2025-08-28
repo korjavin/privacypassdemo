@@ -2,6 +2,23 @@ import React, { useState } from 'react';
 
 const Step6_Trust = () => {
   const [isHonest, setIsHonest] = useState(true);
+  const [serverKey, setServerKey] = useState(null);
+  const [isTokenSigned, setIsTokenSigned] = useState(false);
+  const [verificationStatus, setVerificationStatus] = useState(null); // null, 'Success', 'Failure'
+
+  const handleSign = () => {
+    setServerKey(isHonest ? 'Public Key' : 'Secret Tracking Key');
+    setIsTokenSigned(true);
+    setVerificationStatus(null); // Reset verification status on new signature
+  };
+
+  const handleVerify = () => {
+    if (serverKey === 'Public Key') {
+      setVerificationStatus('Success');
+    } else {
+      setVerificationStatus('Failure');
+    }
+  };
 
   return (
     <div className="step-container">
@@ -30,8 +47,33 @@ const Step6_Trust = () => {
               {isHonest ? 'Honest Mode (Uses Public Key)' : 'Malicious Mode (Uses Tracking Key)'}
             </span>
           </div>
+          <button onClick={handleSign} className="btn">
+            Sign Token
+          </button>
+          {isTokenSigned && (
+            <div className="simulation-status">
+              <p>Server used: <strong>{serverKey}</strong></p>
+              <p>The server sends the evaluated token back to the client.</p>
+            </div>
+          )}
         </div>
-        {/* Placeholder for the rest of the simulation */}
+        <div className="client-panel">
+          <h3>Client Panel</h3>
+          <button onClick={handleVerify} disabled={!isTokenSigned} className="btn">
+            Verify Server's Key
+          </button>
+          {verificationStatus && (
+            <div className="simulation-status">
+              <p>Verification Result: <span className={verificationStatus === 'Success' ? 'success' : 'failure'}>{verificationStatus}</span></p>
+              {verificationStatus === 'Success' && (
+                <p>The client confirms that the server used its public key. The process is secure.</p>
+              )}
+              {verificationStatus === 'Failure' && (
+                <p>The client detects that the server used a different key! The token is invalid and the server's malicious attempt is foiled.</p>
+              )}
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );
