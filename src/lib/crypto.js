@@ -1,3 +1,4 @@
+// Task g4_task_12: Implement backend /api/v1/keys endpoint
 import { secp256k1 } from '@noble/curves/secp256k1';
 import { bytesToHex, hexToBytes } from '@noble/curves/abstract/utils';
 import { sha256 } from '@noble/hashes/sha2.js';
