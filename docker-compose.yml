@@ -8,10 +8,10 @@ services:
     ports:
       - "3000:3000"
     networks:
-      - app-network
+      - vaultwarden_default
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.privacypassdemo.rule=Host(`privacypass.your-domain.com`)"
+      - "traefik.http.routers.privacypassdemo.rule=Host(`${DNS_NAME}`)"
       - "traefik.http.routers.privacypassdemo.entrypoints=websecure"
       - "traefik.http.routers.privacypassdemo.tls.certresolver=myresolver"
       - "traefik.http.services.privacypassdemo.loadbalancer.server.port=3000"
@@ -20,5 +20,5 @@ services:
       - NODE_ENV=production
 
 networks:
-  app-network:
+  vaultwarden_default:
     external: true
