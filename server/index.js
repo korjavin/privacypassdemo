@@ -1,3 +1,4 @@
+// Task g4_task_12: Implement backend /api/v1/keys endpoint
 import express from 'express';
 import cors from 'cors';
 import { generatePrivateKey, getPublicKey } from '../src/lib/crypto.js';
