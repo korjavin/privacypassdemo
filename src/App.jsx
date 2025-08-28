@@ -4,6 +4,7 @@ import Step3_PKC from './components/steps/Step3_PKC';
 import Step2_Goal from './components/steps/Step2_Goal';
 
 import Step4_ECC from './components/steps/Step4_ECC';
+import Step6_Trust from './components/steps/Step6_Trust';
 import './App.css';
 
 function App() {
@@ -13,6 +14,7 @@ function App() {
       <Step2_Goal />
       <Step3_PKC />
       <Step4_ECC />
+      <Step6_Trust />
     </div>
   );
 }
