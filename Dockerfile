@@ -37,12 +37,6 @@ COPY --from=builder /app/dist/ ./dist/
 # Copy static images
 COPY images/ ./images/
 
-# Debug: List files to verify copying
-RUN echo "=== Debug: Listing /app contents ===" && ls -la /app
-RUN echo "=== Debug: Listing server directory ===" && ls -la /app/server
-RUN echo "=== Debug: Checking node_modules noble libraries ===" && ls -la /app/node_modules/@noble/
-RUN echo "=== Debug: Checking crypto.js imports ===" && head -10 /app/server/crypto.js
-
 # Expose the port that the server runs on
 EXPOSE 3000
 
