@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import './Step6_Trust.css';
 
 const Step6_Trust = () => {
   const [isHonest, setIsHonest] = useState(true);

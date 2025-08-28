@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import './Step8.css';
 
 const Step8_FullFlow = () => {
   const [tokens, setTokens] = useState([]);

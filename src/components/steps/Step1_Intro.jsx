@@ -1,5 +1,4 @@
 import React from 'react';
-import './Step1.css';
 
 const Step1_Intro = () => {
   return (
