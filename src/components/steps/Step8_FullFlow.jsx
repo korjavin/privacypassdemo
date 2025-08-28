@@ -117,6 +117,9 @@ const Step8_FullFlow = () => {
           This ensures that the server validates your request without linking it to the final token.
         </p>
         <h2>Interaction: A final, full-scale dashboard simulation.</h2>
+        <div className="step-image-container">
+          <img src="/images/3.1.png" alt="VOPRF Protocol Flow - Technical swimlane diagram showing the complete Privacy Pass token generation and redemption flow" className="step-image" />
+        </div>
       </div>
       <div className="dashboard-column">
         <div className="token-wallet">

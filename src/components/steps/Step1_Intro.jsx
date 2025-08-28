@@ -15,7 +15,7 @@ const Step1_Intro = () => {
         </p>
       </div>
       <div className="animation-column">
-        <div id="animation-placeholder-step1"></div>
+        <img src="/images/1.1.png" alt="Digital Passport Analogy - User activity being tracked and compiled into detailed profiles by data brokers" className="step-image" />
       </div>
     </div>
   );

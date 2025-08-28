@@ -54,6 +54,9 @@ const Step5_OPRF = () => {
           <li><b>Client Unblinds:</b> The Bank returns the sealed envelope. You open it, take out your message, and discard the envelope. You now possess a message signed by the Bank, but the Bank has never seen the message it signed. This is the "unblinding" step.</li>
         </ul>
       </div>
+      <div className="step-image-container">
+        <img src="/images/2.1.png" alt="Carbon Paper Envelope - Three-step diagram showing blind signature process with carbon paper analogy" className="step-image" />
+      </div>
       <div className="simulation-container">
         <div className="column">
           <h3>Client</h3>

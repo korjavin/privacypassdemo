@@ -278,6 +278,22 @@ button:focus-visible {
   background-color: #f9f9f9;
 }
 
+/* Step Images */
+.step-image {
+  max-width: 100%;
+  height: auto;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  margin: 1rem 0;
+}
+
+.step-image-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 1rem 0;
+}
+
 /* Responsive Design */
 @media (max-width: 768px) {
   :root {
@@ -298,6 +314,11 @@ button:focus-visible {
   .simulation-container,
   .step8-container {
     flex-direction: column;
+  }
+
+  .step-image {
+    max-width: 100%;
+    height: auto;
   }
 }
 

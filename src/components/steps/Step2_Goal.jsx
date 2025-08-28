@@ -15,7 +15,7 @@ const Step2_Goal = () => {
         </p>
       </div>
       <div className="interactive-column">
-        <div id="interactive-diagram-step2"></div>
+        <img src="/images/1.2.png" alt="Anonymous Movie Tickets - Comparison between traceable tokens with serial numbers and anonymous tokens" className="step-image" />
       </div>
     </div>
   );

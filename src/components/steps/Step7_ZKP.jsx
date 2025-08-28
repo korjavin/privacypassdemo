@@ -75,9 +75,17 @@ const Step7_ZKP = () => {
     <div className="step-container">
       <div className="text-column">
         <h1>Step 7: The Final Piece of Magic - Zero-Knowledge Proofs (ZKP)</h1>
+        <h2>Concept: Proving Without Revealing</h2>
         <p>
           This simulation demonstrates the VOPRF flow with a Zero-Knowledge Proof.
         </p>
+        <h2>Analogy: The "Where's Wally" Proof</h2>
+        <p>
+          Imagine you want to prove you found Wally in a Where's Wally puzzle without revealing his location. You take a large black board with a small circular hole and position it so only Wally is visible through the hole. This proves you know where Wally is without revealing any contextual information about his location.
+        </p>
+        <div className="step-image-container">
+          <img src="/images/2.2.png" alt="Where's Wally ZKP - Illustration of zero-knowledge proof using Where's Wally analogy with black board and circular cutout" className="step-image" />
+        </div>
         <div className="form-group">
           <label>
             <input
