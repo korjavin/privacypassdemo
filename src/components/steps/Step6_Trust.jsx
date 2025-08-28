@@ -4,11 +4,13 @@ const Step6_Trust = () => {
   const [isHonest, setIsHonest] = useState(true);
   const [serverKey, setServerKey] = useState(null);
   const [isTokenSigned, setIsTokenSigned] = useState(false);
+  const [tokenState, setTokenState] = useState('unsigned'); // unsigned, signed-honest, signed-malicious
   const [verificationStatus, setVerificationStatus] = useState(null); // null, 'Success', 'Failure'
 
   const handleSign = () => {
     setServerKey(isHonest ? 'Public Key' : 'Secret Tracking Key');
     setIsTokenSigned(true);
+    setTokenState(isHonest ? 'signed-honest' : 'signed-malicious');
     setVerificationStatus(null); // Reset verification status on new signature
   };
 
@@ -44,9 +46,21 @@ const Step6_Trust = () => {
               <span className="slider"></span>
             </label>
             <span className="toggle-label">
-              {isHonest ? 'Honest Mode (Uses Public Key)' : 'Malicious Mode (Uses Tracking Key)'}
+              {isHonest ? 'Honest Mode' : 'Malicious Mode'}
             </span>
           </div>
+
+          <div className="pens-container">
+            <div className={`pen ${isHonest ? 'active' : ''}`}>
+              <div className="pen-icon honest"></div>
+              <span>Public Key</span>
+            </div>
+            <div className={`pen ${!isHonest ? 'active' : ''}`}>
+              <div className="pen-icon malicious"></div>
+              <span>Tracking Key</span>
+            </div>
+          </div>
+
           <button onClick={handleSign} className="btn">
             Sign Token
           </button>
@@ -59,6 +73,13 @@ const Step6_Trust = () => {
         </div>
         <div className="client-panel">
           <h3>Client Panel</h3>
+          <div className="token-area">
+            <div className={`token ${tokenState}`}>
+              <span className="token-label">Token</span>
+              {verificationStatus === 'Success' && <div className="verification-icon success">✓</div>}
+              {verificationStatus === 'Failure' && <div className="verification-icon failure">✗</div>}
+            </div>
+          </div>
           <button onClick={handleVerify} disabled={!isTokenSigned} className="btn">
             Verify Server's Key
           </button>
