@@ -25,7 +25,7 @@ export function hashToCurve(message) {
   // For this simulation, we'll use the hash as the x-coordinate and find a valid y.
   try {
     return secp256k1.ProjectivePoint.fromHex(bytesToHex(hashBytes));
-  } catch (e) {
+  } catch {
     // If the hash doesn't correspond to a valid point, we can try again with a modified hash.
     // For simplicity, we'll just hash the hash and try again. This is not robust.
     const newHashBytes = sha256(hashBytes);
