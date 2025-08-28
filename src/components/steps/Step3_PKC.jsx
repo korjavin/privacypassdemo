@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { bytesToHex } from '@noble/curves/abstract/utils';
-import { generatePrivateKey, getPublicKey } from '../../lib/crypto';
+import { bytesToHex, hexToBytes } from '@noble/curves/abstract/utils';
+import { generatePrivateKey, getPublicKey, encrypt, decrypt } from '../../lib/crypto';
 
 const Step3_PKC = () => {
   const [publicKey, setPublicKey] = useState('');
   const [privateKey, setPrivateKey] = useState('');
   const [message, setMessage] = useState('');
-  const [ciphertext, /*setCiphertext*/] = useState('');
+  const [ciphertext, setCiphertext] = useState('');
 
   useEffect(() => {
     const newPrivateKey = generatePrivateKey();
@@ -14,6 +14,26 @@ const Step3_PKC = () => {
     setPrivateKey(bytesToHex(newPrivateKey));
     setPublicKey(newPublicKey);
   }, []);
+
+  const handleEncrypt = async () => {
+    try {
+      const encryptedMessage = await encrypt(publicKey, message);
+      setCiphertext(encryptedMessage);
+    } catch (error) {
+      console.error("Encryption failed:", error);
+      alert("Encryption failed. See console for details.");
+    }
+  };
+
+  const handleDecrypt = async () => {
+    try {
+      const decryptedMessage = await decrypt(hexToBytes(privateKey), ciphertext);
+      setMessage(decryptedMessage);
+    } catch (error) {
+      console.error("Decryption failed:", error);
+      alert("Decryption failed. It's possible the private key doesn't match the public key used for encryption. See console for details.");
+    }
+  };
 
   return (
     <div className="step-container">
@@ -53,7 +73,7 @@ const Step3_PKC = () => {
             value={message}
             onChange={(e) => setMessage(e.target.value)}
           />
-          <button>Encrypt</button>
+          <button onClick={handleEncrypt}>Encrypt</button>
         </div>
         <div className="ciphertext-area">
           <textarea
@@ -62,7 +82,7 @@ const Step3_PKC = () => {
             value={ciphertext}
             rows="4"
           />
-          <button>Decrypt</button>
+          <button onClick={handleDecrypt}>Decrypt</button>
         </div>
       </div>
     </div>
