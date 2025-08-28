@@ -233,11 +233,10 @@ export function generateProof(privateKey, blindedPoint, evaluatedPoint) {
  * @returns {Promise<string>} The encrypted message, hex-encoded.
  */
 export async function encrypt(publicKeyHex, message) {
-  const theirPublicKey = secp256k1.ProjectivePoint.fromHex(publicKeyHex);
   const ephemeralPrivateKey = generatePrivateKey();
   const ephemeralPublicKeyBytes = secp256k1.getPublicKey(ephemeralPrivateKey, false); // uncompressed
 
-  const sharedSecret = secp256k1.getSharedSecret(ephemeralPrivateKey, theirPublicKey);
+  const sharedSecret = secp256k1.getSharedSecret(ephemeralPrivateKey, publicKeyHex);
   const aesKey = hkdf(sha256, sharedSecret, undefined, undefined, 32);
 
   const nonce = randomBytes(12); // 96-bit nonce for AES-GCM
@@ -268,9 +267,9 @@ export async function decrypt(privateKey, encryptedHex) {
   const tag = payload.slice(65 + 12, 65 + 12 + 16);
   const ciphertext = payload.slice(65 + 12 + 16);
 
-  const ephemeralPublicKey = secp256k1.ProjectivePoint.fromHex(bytesToHex(ephemeralPublicKeyBytes));
+  const ephemeralPublicKeyHex = bytesToHex(ephemeralPublicKeyBytes);
 
-  const sharedSecret = secp256k1.getSharedSecret(privateKey, ephemeralPublicKey);
+  const sharedSecret = secp256k1.getSharedSecret(privateKey, ephemeralPublicKeyHex);
   const aesKey = hkdf(sha256, sharedSecret, undefined, undefined, 32);
 
   const encryptedData = concatBytes(ciphertext, tag);
