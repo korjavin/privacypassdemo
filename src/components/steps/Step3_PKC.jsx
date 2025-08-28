@@ -1,10 +1,19 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { bytesToHex } from '@noble/curves/abstract/utils';
+import { generatePrivateKey, getPublicKey } from '../../lib/crypto';
 
 const Step3_PKC = () => {
   const [publicKey, setPublicKey] = useState('');
   const [privateKey, setPrivateKey] = useState('');
   const [message, setMessage] = useState('');
   const [ciphertext, /*setCiphertext*/] = useState('');
+
+  useEffect(() => {
+    const newPrivateKey = generatePrivateKey();
+    const newPublicKey = getPublicKey(newPrivateKey);
+    setPrivateKey(bytesToHex(newPrivateKey));
+    setPublicKey(newPublicKey);
+  }, []);
 
   return (
     <div className="step-container">
