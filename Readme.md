@@ -9,11 +9,3 @@ Privacy Pass emerges as a powerful solution to this problem. It is a cryptograph
 which specific member they are for any given action.2
 The core cryptographic primitive that makes this possible is the Verifiable Oblivious Pseudorandom Function (VOPRF). This protocol allows a server to perform a computation on a user's input without learning the input itself, and to provide a proof that the computation was done correctly according to a publicly known key.4
 
-## How to Use This Repository
-
-This repository is structured to provide a single source of truth for all project stakeholders, including the project director, content creators, and the team of independent coding agents.
-/ARCHITECTURE.md: This document contains the technical blueprint of the system. It details the frontend and backend architecture, the API specification, and the requirements for the cryptographic simulation engine. All technical implementation must adhere to this specification.
-/STEPS.md: This document is the educational and narrative core of the project. It outlines the user's learning journey, step-by-step, providing the concepts, analogies, and interactive goals for each section of the website. It is the source of truth for all content.
-/tasks: This directory contains all developer tasks, broken down into self-contained, parallelizable units. Each task file specifies its goal, acceptance criteria, and the exact files the agent is permitted to modify to prevent merge conflicts.
-/design: This directory contains detailed prompts for generating all required visual assets, including diagrams, illustrations, and flowcharts.
-/presentation: This directory contains the script and plan for a live demonstration of the final, completed project.
