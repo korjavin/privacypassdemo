@@ -1,0 +1,24 @@
+version: "3.8"
+
+services:
+  privacypassdemo:
+    # The image tag will be replaced by the GitHub Actions workflow
+    image: ghcr.io/korjavin/privacypassdemo:latest
+    container_name: privacypassdemo
+    ports:
+      - "3000:3000"
+    networks:
+      - app-network
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.privacypassdemo.rule=Host(`privacypass.your-domain.com`)"
+      - "traefik.http.routers.privacypassdemo.entrypoints=websecure"
+      - "traefik.http.routers.privacypassdemo.tls.certresolver=myresolver"
+      - "traefik.http.services.privacypassdemo.loadbalancer.server.port=3000"
+    restart: unless-stopped
+    environment:
+      - NODE_ENV=production
+
+networks:
+  app-network:
+    external: true
