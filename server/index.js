@@ -9,7 +9,7 @@ import {
   pointToHex,
   evaluate,
   generateProof
-} from '../src/lib/crypto.js';
+} from './crypto.js';
 
 const app = express();
 const port = 3000;
@@ -17,6 +17,10 @@ const port = 3000;
 // Middleware
 app.use(cors({ origin: 'http://localhost:5173' }));
 app.use(express.json()); // Enable parsing of JSON request bodies
+
+// Serve static files
+app.use(express.static('dist'));
+app.use('/images', express.static('images'));
 
 // Server state
 const privateKey = generatePrivateKey();
