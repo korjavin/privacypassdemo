@@ -37,6 +37,7 @@ RUN npm ci --only=production
 # Copy built application from build stage
 COPY --from=build /app/dist ./dist
 COPY --from=build /app/server ./server
+COPY --from=build /app/src ./src
 
 # Expose the port that the server runs on
 EXPOSE 3000
