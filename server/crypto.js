@@ -3,7 +3,7 @@ import { secp256k1 } from '@noble/curves/secp256k1';
 import { bytesToHex, hexToBytes } from '@noble/curves/abstract/utils';
 import { sha256 } from '@noble/hashes/sha2.js';
 import { mod } from '@noble/curves/abstract/modular';
-import { gcm } from '@noble/ciphers/aes';
+import { gcm } from '@noble/ciphers/aes.js';
 import { hkdf } from '@noble/hashes/hkdf';
 import { concatBytes, randomBytes } from '@noble/ciphers/utils';
 
