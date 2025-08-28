@@ -25,7 +25,7 @@ export function hashToCurve(message) {
   // For this simulation, we'll use the hash as the x-coordinate and find a valid y.
   try {
     return secp256k1.ProjectivePoint.fromHex(bytesToHex(hashBytes));
-  } catch (e) {
+  } catch {
     // If the hash doesn't correspond to a valid point, we can try again with a modified hash.
     // For simplicity, we'll just hash the hash and try again. This is not robust.
     const newHashBytes = sha256(hashBytes);
@@ -41,7 +41,7 @@ export function hashToCurve(message) {
  * @returns {{blindedToken: string, blindingFactor: bigint}} The blinded token and the blinding factor.
  */
 export function blind(token) {
-  const T = hashToCurve(token);
+  const T = hashToGroup(token);
   const r = secp256k1.utils.randomPrivateKey();
   const M = T.multiply(mod(BigInt('0x' + bytesToHex(r)), secp256k1.CURVE.n));
   return {
