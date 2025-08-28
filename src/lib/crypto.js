@@ -41,7 +41,7 @@ export function hashToCurve(message) {
  * @returns {{blindedToken: string, blindingFactor: bigint}} The blinded token and the blinding factor.
  */
 export function blind(token) {
-  const T = hashToCurve(token);
+  const T = hashToGroup(token);
   const r = secp256k1.utils.randomPrivateKey();
   const M = T.multiply(mod(BigInt('0x' + bytesToHex(r)), secp256k1.CURVE.n));
   return {
