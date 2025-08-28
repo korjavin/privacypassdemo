@@ -1,6 +1,39 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import { blind, unblind, generatePrivateKey, evaluate } from '../../lib/crypto';
 
 const Step5_OPRF = () => {
+  const [nonce, setNonce] = useState('YourSecretNonce');
+  const [blindedToken, setBlindedToken] = useState(null);
+  const [blindingFactor, setBlindingFactor] = useState(null);
+  const [evaluatedToken, setEvaluatedToken] = useState(null);
+  const [finalToken, setFinalToken] = useState(null);
+  const [serverPrivateKey, setServerPrivateKey] = useState(null);
+
+  useEffect(() => {
+    // Generate a dummy private key for the server when the component mounts
+    setServerPrivateKey(generatePrivateKey());
+  }, []);
+
+  const handleBlind = () => {
+    const { blindedToken, blindingFactor } = blind(nonce);
+    setBlindedToken(blindedToken);
+    setBlindingFactor(blindingFactor);
+  };
+
+  const handleUnblind = () => {
+    if (evaluatedToken && blindingFactor) {
+      const finalToken = unblind(evaluatedToken, blindingFactor);
+      setFinalToken(finalToken);
+    }
+  };
+
+  const handleEvaluate = () => {
+    if (blindedToken && serverPrivateKey) {
+      const { evaluatedElement } = evaluate(serverPrivateKey, blindedToken);
+      setEvaluatedToken(evaluatedElement);
+    }
+  };
+
   return (
     <div className="step-container">
       <div className="text-column">
@@ -25,20 +58,31 @@ const Step5_OPRF = () => {
         <div className="column">
           <h3>Client</h3>
           <p>Nonce (Random Value):</p>
-          <div className="placeholder">nonce_placeholder</div>
-          <button>Blind</button>
+          <input
+            type="text"
+            value={nonce}
+            onChange={(e) => setNonce(e.target.value)}
+            className="input-field"
+          />
+          <button onClick={() => setNonce(Math.random().toString(36).substring(7))}>
+            Generate Random Nonce
+          </button>
+          <button onClick={handleBlind}>Blind</button>
+          <p>Blinding Factor:</p>
+          <div className="placeholder">{blindingFactor ? blindingFactor.toString() : 'blinding_factor_placeholder'}</div>
           <p>Blinded Token:</p>
-          <div className="placeholder">blinded_token_placeholder</div>
-          <button>Unblind</button>
+          <div className="placeholder">{blindedToken || 'blinded_token_placeholder'}</div>
+          <button onClick={handleUnblind}>Unblind</button>
           <p>Final Token:</p>
-          <div className="placeholder">final_token_placeholder</div>
+          <div className="placeholder">{finalToken || 'final_token_placeholder'}</div>
         </div>
         <div className="column">
           <h3>Server</h3>
           <p>Received Blinded Token:</p>
-          <div className="placeholder">received_blinded_token_placeholder</div>
+          <div className="placeholder">{blindedToken || 'received_blinded_token_placeholder'}</div>
+          <button onClick={handleEvaluate}>Evaluate</button>
           <p>Evaluated Token:</p>
-          <div className="placeholder">evaluated_token_placeholder</div>
+          <div className="placeholder">{evaluatedToken || 'evaluated_token_placeholder'}</div>
         </div>
       </div>
     </div>
