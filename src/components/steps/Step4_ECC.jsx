@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { G, multiply } from '../../lib/crypto';
 
 const Step4_ECC = () => {
@@ -12,6 +12,40 @@ const Step4_ECC = () => {
     const newKPoint = multiply(newK);
     setKPoint(newKPoint);
   };
+
+  // --- Visual ECC Arithmetic ---
+  const a = -1; // From our visual curve y^2 = x^3 - x + 1
+
+  // Point addition: R = P + Q
+  const pointAdd = useCallback((P, Q) => {
+    if (!P) return Q;
+    if (!Q) return P;
+    if (P.x === Q.x && P.y === -Q.y) return null; // Point at infinity
+
+    const lambda = (P.x === Q.x && P.y === Q.y)
+      ? (3 * P.x ** 2 + a) / (2 * P.y) // Point doubling
+      : (Q.y - P.y) / (Q.x - P.x);     // Point addition
+
+    const xR = lambda ** 2 - P.x - Q.x;
+    const yR = lambda * (P.x - xR) - P.y;
+
+    return { x: xR, y: yR };
+  }, [a]);
+
+  // Scalar multiplication: R = n * P
+  const multiplyVisual = useCallback((n, P) => {
+    let R = null; // Point at infinity
+    let T = P;    // Temp point
+
+    while (n > 0) {
+      if (n % 2 === 1) {
+        R = pointAdd(R, T);
+      }
+      T = pointAdd(T, T); // Double the point
+      n = Math.floor(n / 2);
+    }
+    return R;
+  }, [pointAdd]);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -66,24 +100,11 @@ const Step4_ECC = () => {
       }
     ctx.stroke();
 
-    // --- Point plotting ---
-    // We can't plot the real G and K, so we'll simulate their positions.
-    // This is a simplified visualization. A real one would require a more
-    // complex mapping from the large curve to the small one.
-
-    // Let's define a "visual" generator point on our representative curve
-    const visualG = { x: -0.5, y: Math.sqrt((-0.5)**3 - (-0.5) + 1) };
-
-    // A simple way to visualize k*G is to just move along the curve.
-    // This is not cryptographically accurate but serves the visual purpose.
-    const visual_k_x = -0.5 + (k * 0.1);
-    const y_sq = visual_k_x ** 3 - visual_k_x + 1;
-    const visual_k_y = Math.sqrt(y_sq > 0 ? y_sq : 0) * (k % 2 === 0 ? -1 : 1);
-
-
-    const plotPoint = (x, y, color, label) => {
-      const canvasX = transformX(x);
-      const canvasY = transformY(y);
+    // --- Point Plotting ---
+    const plotPoint = (point, color, label) => {
+      if (!point) return;
+      const canvasX = transformX(point.x);
+      const canvasY = transformY(point.y);
       ctx.beginPath();
       ctx.arc(canvasX, canvasY, 5, 0, 2 * Math.PI);
       ctx.fillStyle = color;
@@ -92,10 +113,17 @@ const Step4_ECC = () => {
       ctx.fillText(label, canvasX + 10, canvasY + 5);
     };
 
-    plotPoint(visualG.x, visualG.y, 'blue', 'G');
-    plotPoint(visual_k_x, visual_k_y, 'red', 'K');
+    // Define a "visual" generator point on our representative curve
+    const visualG = { x: -1.25, y: Math.sqrt((-1.25)**3 - (-1.25) + 1) };
 
-  }, [k]);
+    // Calculate k * visualG
+    const visualK = multiplyVisual(k, visualG);
+
+    // Plot points
+    plotPoint(visualG, 'blue', 'G');
+    plotPoint(visualK, 'red', 'K');
+
+  }, [k, multiplyVisual]);
 
   return (
     <div className="step-container">
