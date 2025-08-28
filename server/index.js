@@ -1,6 +1,7 @@
 // Task g4_task_12: Implement backend /api/v1/keys endpoint
 import express from 'express';
 import cors from 'cors';
+import path from 'path';
 import {
   generatePrivateKey,
   getPublicKey,
@@ -94,6 +95,11 @@ app.post('/api/v1/evaluate', (req, res) => {
     console.error('Evaluation failed:', error.message);
     res.status(500).json({ error: 'Failed to evaluate blinded element. The provided element may be invalid.' });
   }
+});
+
+// Serve index.html for root route and any unmatched routes (SPA fallback)
+app.get('*', (req, res) => {
+  res.sendFile(path.join(process.cwd(), 'dist', 'index.html'));
 });
 
 app.listen(port, () => {
