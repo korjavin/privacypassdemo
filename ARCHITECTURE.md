@@ -13,8 +13,8 @@ The Crypto Simulation Engine is a JavaScript library of cryptographic primitives
 Framework: The frontend will be built using React (v18 or later) with the Vite build tool. This choice provides a modern, fast development environment and a robust component-based model well-suited for the project's modular structure.
 Component Structure: A clear, hierarchical file structure is to be enforced to facilitate parallel development. All components will reside within the src/components/ directory.
 Educational step components: src/components/steps/Step1_Intro.jsx, src/components/steps/Step2_Goal.jsx, etc.
-Interactive modules: src/components/interactive/ECC_Visualizer.jsx, src/components/interactive/VOPRF_Simulator.jsx, etc.
-Shared UI elements: src/components/ui/Button.jsx, src/components/ui/Card.jsx, etc.
+Interactive modules (Future Work): The `src/components/interactive/` directory is a placeholder for future interactive visualizers (e.g., `ECC_Visualizer.jsx`). This feature is not yet implemented.
+Shared UI elements (Future Work): The `src/components/ui/` directory is a placeholder for a future shared component library (e.g., `Button.jsx`). This feature is not yet implemented.
 State Management: State will be managed at the component level using React Hooks (useState, useEffect) wherever possible. A global state management library (e.g., Redux, Zustand) is deemed unnecessary for the scope of this project and would introduce needless complexity. Interactive modules will manage their own internal state, receiving initial props from their parent step component.
 
 3. Backend API Specification
@@ -51,7 +51,9 @@ Simulates redeeming a token to access a service. The server verifies the token s
 
 4. Cryptographic Simulation Engine
 
-This shared JavaScript library (src/lib/crypto.js) will contain all the core cryptographic logic. It must be usable in both the Node.js backend and the browser frontend. While it does not need to be production-grade in terms of side-channel resistance (e.g., constant-time operations), it must be mathematically correct to accurately demonstrate the protocol.
+**Note on Code Duplication**: Currently, the cryptographic logic is duplicated in two identical files: `src/lib/crypto.js` (for the frontend) and `server/crypto.js` (for the backend). The original design intended for a single shared library. This duplication is a known issue and should be resolved in future refactoring. For more details, see `improve.md`.
+
+The shared JavaScript library will contain all the core cryptographic logic. It must be usable in both the Node.js backend and the browser frontend. While it does not need to be production-grade in terms of side-channel resistance (e.g., constant-time operations), it must be mathematically correct to accurately demonstrate the protocol.
 Language: JavaScript (ESM).
 Dependencies: A well-vetted library for elliptic curve operations, such as noble-curves, should be used to handle the low-level mathematics.
 Core Primitives to Implement:
