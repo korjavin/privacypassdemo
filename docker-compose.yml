@@ -3,7 +3,7 @@ version: "3.8"
 services:
   privacypassdemo:
     # The image tag will be replaced by the GitHub Actions workflow
-    image: ghcr.io/korjavin/privacypassdemo:latest
+    image: ghcr.io/korjavin/privacypassdemo:704b4fd792f1ce2e164754f7456732eb461f3a43
     container_name: privacypassdemo
     ports:
       - "3000:3000"
