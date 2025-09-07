@@ -114,6 +114,10 @@ This is an educational demo. For production use:
 - Use production-grade cryptographic libraries
 - Follow security best practices for key management
 
+## ⚠️ Known Issues and Limitations
+
+This project has several known issues and limitations, including simplified cryptographic functions and code duplication. It is **not suitable for production use**. For a detailed breakdown of these issues, please see the [Project Improvements and Known Issues](improve.md) document.
+
 ## 📚 Learn More
 
 - [Privacy Pass IETF Draft](https://datatracker.ietf.org/doc/draft-ietf-privacypass-architecture/)

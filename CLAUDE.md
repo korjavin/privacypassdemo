@@ -42,30 +42,21 @@ The Privacy Pass demo is an interactive educational application that teaches cry
 /Users/iv/Projects/privacypassdemo/
 ├── src/                           # Frontend React application
 │   ├── components/
-│   │   ├── steps/                 # 8 educational step components
-│   │   │   ├── Step1_Intro.jsx    # Problem introduction
-│   │   │   ├── Step2_Goal.jsx     # Anonymous tokens concept
-│   │   │   ├── Step3_PKC.jsx      # Public key cryptography
-│   │   │   ├── Step4_ECC.jsx      # Elliptic curve cryptography
-│   │   │   ├── Step5_OPRF.jsx     # Oblivious functions
-│   │   │   ├── Step6_Trust.jsx    # Trust verification
-│   │   │   ├── Step7_ZKP.jsx      # Zero-knowledge proofs
-│   │   │   └── Step8_FullFlow.jsx # Complete protocol
-│   │   ├── interactive/           # Interactive components (empty)
-│   │   └── ui/                    # Shared UI components (empty)
+│   │   ├── steps/                 # 8 educational step components (Step1_Intro.jsx, etc.)
+│   │   ├── interactive/           # (empty) Placeholder for future interactive components
+│   │   └── ui/                    # (empty) Placeholder for future shared UI components
 │   ├── lib/
-│   │   └── crypto.js              # Client-side crypto utilities
+│   │   └── crypto.js              # Client-side crypto utilities (duplicated in /server)
 │   ├── App.jsx                    # Main application component
 │   ├── main.jsx                   # React application entry point
 │   └── index.css                  # Global styles
 ├── server/                        # Backend Express server
 │   ├── index.js                   # Main server file with API endpoints
-│   └── crypto.js                  # Server-side crypto operations
+│   └── crypto.js                  # Server-side crypto operations (duplicated from /src/lib)
 ├── images/                        # Educational diagrams and visuals
 ├── design/                        # Image generation prompts
 ├── dist/                          # Built frontend assets
 ├── public/                        # Static assets
-├── tasks/                         # Development task documentation
 ├── .github/workflows/             # CI/CD configuration
 │   └── deploy.yml                 # Automated deployment workflow
 ├── docker-compose.yml             # Production deployment config
@@ -73,6 +64,8 @@ The Privacy Pass demo is an interactive educational application that teaches cry
 ├── vite.config.js                 # Vite build configuration
 ├── package.json                   # Dependencies and scripts
 ├── ARCHITECTURE.md                # Detailed technical specification
+├── CLAUDE.md                      # This file, the AI developer guide
+├── improve.md                     # Documentation of known issues and vulnerabilities
 ├── STEPS.md                       # Educational content specification
 └── readme.md                      # Project documentation
 ```
